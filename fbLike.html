@@ -1,0 +1,101 @@
+<html>
+<head>
+
+<style>
+.count_box{
+    background: white;
+    border: 1px solid #898f9c;
+    -webkit-border-radius: 2px;
+    color: #6a7180;
+    display: inline-block;
+    font-size: 11px;
+    height: auto;
+    line-height: 18px;
+    margin-left: 6px;
+    min-width: 15px;
+    padding: 0 3px;
+    text-align: center;
+    white-space: nowrap;
+}
+.count_box_nub{
+    height: 0;
+    left: 2px;
+    position: relative;
+    top: -15px;
+    width: 5px;
+    z-index: 2;
+}
+.count_box_nub s, .count_box_nub i{
+    border-color: transparent #898f9c;
+    border-style: solid;
+    border-width: 4px 5px 4px 0;
+    display: block;
+    position: relative;
+    top: 1px;
+}
+
+.count_box_nub i{
+    border-right-color: #fff;
+    left: 2px;
+    top: -7px;
+}
+.facebook_button{
+    float: left;
+    width: 52px; height: 22px;
+    padding: 0 4px 0 20px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: #ECEEF5;
+    -webkit-border-radius: 3px;
+    color: #3B5998;
+    border: 1px solid #CAD4E7;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #3B5998;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABW0lEQVR42qWS3ytDYRjH9z+R2SEucCFxYdkOo6HQkanphCtFlvy4XTtna360WjaUcJy5Ie1iKaVQftVakXaxaEmp2fl633dxDsu52VOfm+f9fs77PG/HUlHVdcspgkbAX2y8BGtXADUEjpc0mtVFXSqjQ4jAu6BAXDxE28gGk3WxXCABGa1D6zg4ucV3TS4n2M2mos0pwSXGUSgUcXHzjJVwEnZPlPbNxfqeINzT26AVV69Q1ekHVzr7X2zoDSF5nsFTNs/E/NsH0o8vGJ3dg9URMBFdQSSS93jI5JiYe33H5V0WwzO7qKWi+agy3FOlUXeOruludPzfo3LsFSUj7MsuMcbELbJjtd1fOjOKLYNrcE7EwBtweDchLqlMVMnY9vEoy5CsLrYLEc3jU2BkbF6BTz5F4bOI47M0hLl91qfZH7GxL5RqHljVCDBAfwC6J7utqZ/1NJq1VFJfEBZqgX+geF0AAAAASUVORK5CYII=);
+    background-repeat: no-repeat;
+    background-position: 4px center;
+}
+</style>    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<table>
+<tbody>
+    <tr>
+        <td>
+            <div>
+                <button class="facebook_button">
+                Like        
+                </button>
+            </div>
+        </td>
+        <td>
+            <div class="count_box"> </div>
+            <div class="count_box_nub">
+                <s></s><i></i>
+            </div>
+        </td>
+    </tr>    
+</tbody>
+</table>
+
+<script type='text/javascript'>
+function newWindow(uri,width,height) {
+    if(!window.open(uri,uri,'scrollbars=1,toolbar=0,resizable=1,status=0,width='+width+',height='+height)) {
+        document.location.href=uri;
+    }
+}
+$('.facebook_button').click(function() {
+
+     newWindow('http://www.facebook.com/sharer.php?u=http://www.stubhub.com/',720,420);
+    return false; 
+});
+$.get('/fbCache/fbLikes.xml', function(data) {
+    $('.count_box').text($(data).find('like_count').text());
+});
+</script>
+
+</body>
+</html>
