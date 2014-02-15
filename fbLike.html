@@ -89,7 +89,8 @@ function newWindow(uri,width,height) {
 }
 $('.facebook_button').click(function() {
 
-     newWindow('http://www.facebook.com/sharer.php?u=http://www.stubhub.com/',720,420);
+ //    newWindow('http://www.facebook.com/sharer.php?u=http://www.stubhub.com/',720,420);
+    newWindow('https://www.facebook.com/plugins/like.php?action=like&app_id=109033589189418&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D40%23cb%3Df23337593c%26domain%3Dwww.stubhub.com%26origin%3Dhttp%253A%252F%252Fwww.stubhub.com%252Ff3adb0bab4%26relation%3Dparent.parent&font=arial&href=http%3A%2F%2Fwww.facebook.com%2Fstubhub&layout=button_count&locale=en_US&ref=footer&sdk=joey&show_faces=false', 720, 420);
     return false; 
 });
 $.get('/fbCache/fbLikes.xml', function(data) {
