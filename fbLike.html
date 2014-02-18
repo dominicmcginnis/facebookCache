@@ -39,7 +39,7 @@
     left: 2px;
     top: -7px;
 }
-.facebook_button{
+.fb_like_button{
     float: left;
     width: 52px; height: 22px;
     padding: 0 4px 0 20px;
@@ -58,15 +58,18 @@
     background-position: 4px center;
 }
 </style>    
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 </head>
 <body>
+<div>
 <table>
 <tbody>
     <tr>
         <td>
             <div>
-                <button class="facebook_button">
+                <button class="fb_like_button">
                 Like        
                 </button>
             </div>
@@ -79,24 +82,17 @@
         </td>
     </tr>    
 </tbody>
+</div>
+<div id="dialog"></div>
+
 </table>
 
 <script type='text/javascript'>
-function newWindow(uri,width,height) {
-    if(!window.open(uri,uri,'scrollbars=1,toolbar=0,resizable=1,status=0,width='+width+',height='+height)) {
-        document.location.href=uri;
-    }
-}
-$('.facebook_button').click(function() {
-
- //    newWindow('http://www.facebook.com/sharer.php?u=http://www.stubhub.com/',720,420);
-    newWindow('https://www.facebook.com/plugins/like.php?action=like&app_id=109033589189418&channel=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D40%23cb%3Df23337593c%26domain%3Dwww.stubhub.com%26origin%3Dhttp%253A%252F%252Fwww.stubhub.com%252Ff3adb0bab4%26relation%3Dparent.parent&font=arial&href=http%3A%2F%2Fwww.facebook.com%2Fstubhub&layout=button_count&locale=en_US&ref=footer&sdk=joey&show_faces=false', 720, 420);
-    return false; 
-});
 $.get('/fbCache/fbLikes.xml', function(data) {
     $('.count_box').text($(data).find('like_count').text());
 });
 </script>
+<script type="text/javascript" src="/fbCache/fastfb.js"></script>
 
 </body>
 </html>

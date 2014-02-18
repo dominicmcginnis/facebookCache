@@ -9,8 +9,8 @@
 ### ====================================================================== ###
 #
 FB_URL='https://api.facebook.com/method/fql.query'
+SITE_TO_LIKE='http://www.facebook.com/********'
 OFILE='fbLikes.xml'
-#OFILE='/nas/html/stubhub/facebook/fbLikes.js'
 ERROR_FLAG=0
 ERROR_LOG=messages
 
@@ -25,7 +25,7 @@ error() {
  }
 
 # curl call for StubHub US
-/usr/bin/curl --get "$FB_URL" --data 'query=select%20%20like_count%20from%20link_stat%20where%20url=%22http://www.facebook.com/Stubhub/%22' >> "$OFILE" 2> /tmp/$$-US.log && /bin/rm -f /tmp/$$-US.log || ERROR_FLAG=1
+/usr/bin/curl --get "$FB_URL" --data 'query=select%20%20like_count%20from%20link_stat%20where%20url=%22$SITE_TO_LIKE%22' >> "$OFILE" 2> /tmp/$$-US.log && /bin/rm -f /tmp/$$-US.log || ERROR_FLAG=1
 
 OFILE_WC=`/usr/bin/wc -w $OFILE | awk '{print $1}'`
 
