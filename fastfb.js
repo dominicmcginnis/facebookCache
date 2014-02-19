@@ -112,8 +112,8 @@ var FastFB = (function ($) {
 	    	apiReady = false;
 
 		    culture = 'en_US';
-		    applicationID = '109033589189418';
-		    facebookPage = 'http://www.facebook.com/Stubhub';
+		    applicationID = '******************';
+		    facebookPage = 'http://www.facebook.com/**********';
     
 		    // Add fb-root element if necessary
 		    if ($('#fb-root').length === 0) $('<div id="fb-root" />').appendTo('body');
