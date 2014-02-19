@@ -8,26 +8,30 @@ var FastFB = (function ($) {
         apiCalled,
         apiReady;
 
+    var fbCallback = function () {
+        // Run the Facebook init() function to initialize the Facebook API
+        global.FB.init({ appId: applicationID, status: true, cookie: true, xfbml: true });
+
+        // Detect when FB.init has finished and trigger a persistent notification
+        // Source: http://facebook.stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete
+        global.FB.getLoginStatus(function (response) {
+            $.trigger('facebook-api-ready');
+            apiReady = true;
+        });
+    }
 
     var callAPI = function () {
-        if (apiCalled) return;
-        apiCalled = true;
+        if (apiCalled) {		
+			fbCallback();
+			return;
+		}
+		apiCalled = true;
 
         var fbjs = (location.protocol=='https:' ? 'https:' : 'http:') + '//connect.facebook.net/' + culture + '/all.js';
 
         // Use a proper async script loader here for better stability
-        $.getScript(fbjs, function () {
+        $.getScript(fbjs, fbCallback);
 
-            // Run the Facebook init() function to initialize the Facebook API
-            global.FB.init({ appId: applicationID, status: true, cookie: true, xfbml: true });
-
-            // Detect when FB.init has finished and trigger a persistent notification
-            // Source: http://facebook.stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete
-            global.FB.getLoginStatus(function (response) {
-                $.trigger('facebook-api-ready');
-                apiReady = true;
-            });
-        });
     };
 
     var parseXFBML = function () {
@@ -35,7 +39,7 @@ var FastFB = (function ($) {
         if (apiReady) {
             global.FB.XFBML.parse();
         } else {
-            $.on('facebook-api-ready', function () {
+            $.bind('facebook-api-ready', function () {
                 global.FB.XFBML.parse();
             });
             callAPI();
@@ -67,9 +71,20 @@ var FastFB = (function ($) {
 	        //});
 
 			$( "#dialog" ).html(likeBox).dialog({
-					position: {  my: "center", at: "center", of: window },
-					draggable: false
-					});
+					position: {  my: "center", at: "left bottom", of: window },
+					height: 594,
+					width: 615,
+					draggable: false,
+					modal: false,
+					resizable: false,
+					closeOnEscape: true,
+			        buttons: {
+           				"close": function(){ $(this).dialog("close"); }
+            		},
+					open: function (event, ui) {
+    					$('#dialog').css('overflow', 'hidden');
+  					}					
+				});
 			$(".ui-dialog-titlebar").hide();
 	        // Let Facebook find and populate the like box element
 	        parseXFBML();
@@ -86,7 +101,7 @@ var FastFB = (function ($) {
 	        if (apiReady) {
 	            launchFacebookUI();
 	        } else {
-	            $.on('facebook-api-ready', launchFacebookUI);
+	            $.bind('facebook-api-ready', launchFacebookUI);
 	            callAPI();
 	        }
     	},
@@ -97,14 +112,14 @@ var FastFB = (function ($) {
 	    	apiReady = false;
 
 		    culture = 'en_US';
-		    applicationID = '**********';
-		    facebookPage = 'http://www.facebook.com/*******';
+		    applicationID = '109033589189418';
+		    facebookPage = 'http://www.facebook.com/Stubhub';
     
 		    // Add fb-root element if necessary
 		    if ($('#fb-root').length === 0) $('<div id="fb-root" />').appendTo('body');
 
 		    // Bind like function to like buttons
-		    $('.fb_like_button').on('click', function() { FastFB.like(); });
+		    $('.fb_like_button').bind('click', function() { FastFB.like(); });
 		}	   
 	};
 
