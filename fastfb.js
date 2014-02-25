@@ -15,7 +15,7 @@ var FastFB = (function ($) {
         // Detect when FB.init has finished and trigger a persistent notification
         // Source: http://facebook.stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete
         global.FB.getLoginStatus(function (response) {
-            $.trigger('facebook-api-ready');
+            $('#fb-like-box').trigger('facebook-api-ready');
             apiReady = true;
         });
     }
@@ -39,7 +39,7 @@ var FastFB = (function ($) {
         if (apiReady) {
             global.FB.XFBML.parse();
         } else {
-            $.bind('facebook-api-ready', function () {
+            $('#fb-like-box').bind('facebook-api-ready', function () {
                 global.FB.XFBML.parse();
             });
             callAPI();
@@ -69,8 +69,8 @@ var FastFB = (function ($) {
 	        //    width: w,
 	        //    height: h + 7 // avoid scroll bars
 	        //});
-
 			$( "#dialog" ).html(likeBox).dialog({
+					dialogClass : {'fb-dialog fb-corner-all fb-widget-content'},
 					position: {  my: "center", at: "left bottom", of: window },
 					height: 594,
 					width: 615,
@@ -101,7 +101,7 @@ var FastFB = (function ($) {
 	        if (apiReady) {
 	            launchFacebookUI();
 	        } else {
-	            $.bind('facebook-api-ready', launchFacebookUI);
+	            $('#fb-like-box').bind('facebook-api-ready', launchFacebookUI);
 	            callAPI();
 	        }
     	},
@@ -112,8 +112,8 @@ var FastFB = (function ($) {
 	    	apiReady = false;
 
 		    culture = 'en_US';
-		    applicationID = '******************';
-		    facebookPage = 'http://www.facebook.com/**********';
+		    applicationID = '************';
+		    facebookPage = '************';
     
 		    // Add fb-root element if necessary
 		    if ($('#fb-root').length === 0) $('<div id="fb-root" />').appendTo('body');
