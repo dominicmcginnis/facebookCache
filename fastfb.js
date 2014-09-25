@@ -6,7 +6,9 @@ var FastFB = (function ($) {
         facebookPage,
         culture,
         apiCalled,
-        apiReady;
+        apiReady,
+        fbUid,
+        fbAccessToken;
 
     var fbCallback = function () {
         // Run the Facebook init() function to initialize the Facebook API
@@ -15,10 +17,25 @@ var FastFB = (function ($) {
         // Detect when FB.init has finished and trigger a persistent notification
         // Source: http://facebook.stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete
         global.FB.getLoginStatus(function (response) {
-            $('#fb-like-box').trigger('facebook-api-ready');
-            apiReady = true;
+        	console.log("login status response: " + response.status)
+  			if (response.status === 'connected') {
+			    // the user is logged in and has authenticated your
+			    // app, and response.authResponse supplies
+			    // the user's ID, a valid access token, a signed
+			    // request, and the time the access token 
+			    // and signed request each expire
+			    fbUid = response.authResponse.userID;
+			    fbAccessToken = response.authResponse.accessToken;
+			    console.log("fb access token: " + fbAccessToken);
+			 } else if (response.status === 'not_authorized') {
+			    // the user is logged in to Facebook, 
+			    // but has not authenticated your app
+			 }        	
+        	$('#fb-like-box').trigger('facebook-api-ready');
+        	apiReady = true;
         });
-    }
+
+    };
 
     var callAPI = function () {
         if (apiCalled) {		
@@ -37,13 +54,33 @@ var FastFB = (function ($) {
     var parseXFBML = function () {
         // Parse when the API is ready
         if (apiReady) {
+		    console.log("API is ready!");
+            triggerLike();
             global.FB.XFBML.parse();
         } else {
-            $('#fb-like-box').bind('facebook-api-ready', function () {
-                global.FB.XFBML.parse();
-            });
+            $('#fb-like-box').bind('facebook-api-ready',function () {
+		        console.log("triggered facebook-api-ready callback!");
+	        	triggerLike();
+		        global.FB.XFBML.parse();
+    		});
             callAPI();
         }
+    };
+
+    var triggerLike = function() {
+        //$("#u_0_0").trigger( "submit" );
+		// Doing a XD submit trigger… Obviously fails due to XD issues
+			//$('.fb-like-box').find('iframe').contents().trigger('submit')
+
+		//Utilizing the FB.Event.fire and FB.EventProvider.fire to send an "edge.create" message – this too failed.  And I did notice the warning that this method will be removed.
+//        FB.Event.subscribe("edge.create", function () { console.log("edge.create fired")});
+//        FB.Event.fire("edge.create");
+
+		//Calling the Open Graph API, but again fails since getLoginStatus returns 'not_authorized' so I can't access the user or access tokens.
+//		$.post('https://graph.facebook.com/'+facebookPage+'/likes', {access_token: fbAccessToken}, function() {
+//			console.log("called facebook grpah for: " + facebookPage);
+//		});
+
     };
 
     var launchFacebookUI = function () {
@@ -63,27 +100,20 @@ var FastFB = (function ($) {
 	            h = 488,
 	            likeBox = '<div class="fb-like-box" data-href="' + facebookPage + '" data-width="' + w + '" data-height="' + h + '" data-show-faces="true" data-border-color="#fff" data-stream="true" data-header="false"></div>';
 
-	        // Substitute for whatever lightbox script you like
-	        //Dialog.open({
-	        //    content: likeBox,
-	        //    width: w,
-	        //    height: h + 7 // avoid scroll bars
-	        //});
 			$( "#dialog" ).html(likeBox).dialog({
-					dialogClass : {'fb-dialog fb-corner-all fb-widget-content'},
+					dialogClass: 'fb-dialog fb-corner-all fb-widget-content',
 					position: {  my: "center", at: "left bottom", of: window },
-					height: 594,
-					width: 615,
+					height: 520,
+					width: 570,
 					draggable: false,
 					modal: false,
 					resizable: false,
 					closeOnEscape: true,
 			        buttons: {
-           				"close": function(){ $(this).dialog("close"); }
-            		},
-					open: function (event, ui) {
-    					$('#dialog').css('overflow', 'hidden');
-  					}					
+           				"close": function(){ 
+           						$(this).dialog("close"); 
+       						}
+            		}					
 				});
 			$(".ui-dialog-titlebar").hide();
 	        // Let Facebook find and populate the like box element
@@ -112,8 +142,8 @@ var FastFB = (function ($) {
 	    	apiReady = false;
 
 		    culture = 'en_US';
-		    applicationID = '************';
-		    facebookPage = '************';
+		    applicationID = '****************';
+		    facebookPage = 'http://www.facebook.com/stubhub';
     
 		    // Add fb-root element if necessary
 		    if ($('#fb-root').length === 0) $('<div id="fb-root" />').appendTo('body');
